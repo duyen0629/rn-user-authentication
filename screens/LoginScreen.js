@@ -2,14 +2,20 @@ import AuthContent from "../components/Auth/AuthContent";
 import LoadingOverlay from "../components/ui/LoadingOverlay";
 import { login } from "../util/auth";
 import { useState } from "react";
+import { Alert } from "react-native";
 
 function LoginScreen() {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   async function loginHandler({ email, password }) {
     setIsAuthenticating(true);
-    await login(email, password);
-    setIsAuthenticating(false);
+    try {
+      await login(email, password);
+    } catch (error) {
+      Alert.alert("Authentication failed", "Please check your credentials or try again later.");
+    } finally {
+      setIsAuthenticating(false);
+    }
   }
 
   if (isAuthenticating) {
