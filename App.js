@@ -6,6 +6,8 @@ import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import { Colors } from "./constants/styles";
+import { useContext } from "react";
+import { AuthContext } from "./store/auth-context";
 
 const Stack = createNativeStackNavigator();
 
@@ -39,12 +41,9 @@ function AuthenticatedStack() {
 }
 
 function Navigation() {
+  const authContext = useContext(AuthContext);
   return (
-    <AuthContextProvider>
-      <NavigationContainer>
-        <AuthStack />
-      </NavigationContainer>
-    </AuthContextProvider>
+    <NavigationContainer>{authContext.isAuthenticated ? <AuthenticatedStack /> : <AuthStack />}</NavigationContainer>
   );
 }
 
@@ -52,8 +51,9 @@ export default function App() {
   return (
     <>
       <StatusBar style="light" />
-
-      <Navigation />
+      <AuthContextProvider>
+        <Navigation />
+      </AuthContextProvider>
     </>
   );
 }
